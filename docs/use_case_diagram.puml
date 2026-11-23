@@ -1,0 +1,57 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Authenticated Student" as Student
+actor "Peer Tester / Faculty Evaluator" as Evaluator
+actor "LLM API (optional)" as LLM
+database "Cloud PostgreSQL" as DB
+
+rectangle "NeuroTask Platform" {
+  usecase "Register / Log in" as UC1
+  usecase "Manage Personal Account" as UC2
+  usecase "Create Academic Assignment" as UC3
+  usecase "Break Assignment into\n10–15 min Micro-actions" as UC4
+  usecase "Order Steps by\nPrerequisite Dependencies (DAG)" as UC5
+  usecase "View Active Step" as UC6
+  usecase "Run Focus Session\nwith Visual Timer" as UC7
+  usecase "Complete Micro-action" as UC8
+  usecase "Use I'm Stuck Rescue" as UC9
+  usecase "Split Blocked Step into\nTwo 5-min Actions" as UC10
+  usecase "Log Energy Rating\nand Distractions" as UC11
+  usecase "View Personal Burnout\nTelemetry" as UC12
+  usecase "Save / Reuse Assignment\nBlueprint" as UC13
+  usecase "Verify Multi-user Isolation\nand Workflow" as UC14
+}
+
+Student --> UC1
+Student --> UC2
+Student --> UC3
+Student --> UC6
+Student --> UC7
+Student --> UC8
+Student --> UC9
+Student --> UC11
+Student --> UC12
+Student --> UC13
+
+UC3 .> UC4 : <<include>>
+UC4 .> UC5 : <<include>>
+UC9 .> UC10 : <<include>>
+UC7 .> UC11 : <<include>>
+UC8 .> UC11 : <<include>>
+UC4 --> LLM : optional generation
+UC1 --> DB
+UC2 --> DB
+UC3 --> DB
+UC4 --> DB
+UC8 --> DB
+UC11 --> DB
+UC12 --> DB
+UC13 --> DB
+
+Evaluator --> UC1
+Evaluator --> UC14
+UC14 --> DB
+@enduml
