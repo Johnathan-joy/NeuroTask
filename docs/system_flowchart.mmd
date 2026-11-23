@@ -1,0 +1,40 @@
+flowchart TD
+    A([Start]) --> B[Open NeuroTask]
+    B --> C{Existing account?}
+    C -- No --> D[Register account]
+    C -- Yes --> E[Log in]
+    D --> F[Validate input and hash password]
+    F --> G[(PostgreSQL: create user)]
+    G --> E
+    E --> H{Credentials valid?}
+    H -- No --> I[Show login error]
+    I --> E
+    H -- Yes --> J[Load authenticated user workspace]
+    J --> K[Create or select assignment]
+    K --> L[Submit assignment prompt]
+    L --> M[Generate micro-actions using LLM JSON schema]
+    M --> N{Valid, atomic steps?}
+    N -- No --> O[Use offline heuristic templates / retry]
+    O --> P[Build prerequisite dependency DAG]
+    N -- Yes --> P
+    P --> Q[Save assignment and subtasks for this user]
+    Q --> R[Find next unlocked micro-action]
+    R --> S{An unlocked step exists?}
+    S -- No --> T[Show assignment completion]
+    S -- Yes --> U[Display only active step and criteria]
+    U --> V[Start focus timer]
+    V --> W{User stuck?}
+    W -- Yes --> X[Split blocked step into two 5-min actions]
+    X --> Y[Log rescue event]
+    Y --> R
+    W -- No --> Z{Step completed?}
+    Z -- No --> AA[Continue / pause focus session]
+    AA --> AB[Capture energy rating and distraction tags]
+    AB --> V
+    Z -- Yes --> AC[Mark step complete]
+    AC --> AD[Unlock dependent steps]
+    AD --> AE[Log session duration, energy and distractions]
+    AE --> R
+    T --> AF[Update personal telemetry dashboard]
+    AF --> AG[Optionally save assignment blueprint]
+    AG --> AH([End / Return to workspace])
