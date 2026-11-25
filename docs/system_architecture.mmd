@@ -1,0 +1,55 @@
+# NeuroTask System Architecture
+
+## Prototype architecture — Streamlit
+
+```mermaid
+flowchart TD
+    A[Student / Admin] --> B[Streamlit Interface]
+    B --> C[Authentication Module]
+    B --> D[Application Modules]
+    D --> E[Assignment Management]
+    D --> F[AI Task Decomposition]
+    D --> G[Dependency / DAG Engine]
+    D --> H[Focus Workspace]
+    D --> I[Telemetry and Analytics]
+    D --> J[Blueprint Library]
+    D --> K[Admin Management]
+    C --> L[SQLAlchemy Database Layer]
+    E --> L
+    F --> L
+    G --> L
+    H --> L
+    I --> L
+    J --> L
+    K --> L
+    F --> M[Gemini / Groq API]
+    L --> N[(PostgreSQL)]
+```
+
+## Final architecture — React + Tailwind CSS + FastAPI
+
+```mermaid
+flowchart TD
+    A[Student / Admin] --> B[React Frontend]
+    B --> C[Tailwind CSS Interface]
+    C --> D[FastAPI Backend]
+    D --> E[Authentication and Authorization]
+    D --> F[Assignment API]
+    D --> G[Task and Dependency API]
+    D --> H[Focus Session API]
+    D --> I[Telemetry and Insights API]
+    D --> J[Blueprint API]
+    D --> K[Admin API]
+    E --> L[Reusable Python Core Modules]
+    F --> L
+    G --> L
+    H --> L
+    I --> L
+    J --> L
+    K --> L
+    L --> M[SQLAlchemy Database Layer]
+    M --> N[(PostgreSQL)]
+    L --> O[Gemini / Groq API]
+```
+
+The prototype calls reusable Python modules directly from Streamlit. The final application will expose those modules through FastAPI endpoints for the React frontend. PostgreSQL and the core business logic are intended to be reused.
