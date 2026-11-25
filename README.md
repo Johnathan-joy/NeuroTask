@@ -47,7 +47,7 @@ The core Python business logic and PostgreSQL database are intended to be reused
 - Updated application flowchart.
 - ER diagram and prototype/final architecture diagrams.
 
-**Important:** Dashboard pages and most feature modules are scaffolding/placeholders. The database schema is a design foundation; it has not yet been connected to a live database or migration-tested. DAG cycle detection and cross-record ownership checks must be enforced by application logic.
+**Important:** Dashboard pages and most feature modules are scaffolding/placeholders. The database schema is a design foundation; it has not yet been connected to a live database or migration-tested. For a fresh database, use `database/schema.sql`. For an existing database created from the original four-table schema, back it up and review/run `database/migrations/002_neurotask_v2.sql` before using the updated models; SQLAlchemy `create_all()` does not alter existing tables. DAG cycle detection and cross-record ownership checks must be enforced by application logic.
 
 ## Run the prototype locally
 
@@ -66,6 +66,8 @@ Never commit `.env` or publish database/API credentials.
 - `docs/system_flowchart.mmd` — Student and Admin application flow.
 - `docs/er_diagram.mmd` — Database entities and relationships.
 - `docs/system_architecture.mmd` — Prototype and final application architectures.
+- `docs/SRS.md` — Software Requirements Specification, version 2.0.
+- `database/migrations/002_neurotask_v2.sql` — Upgrade script for an existing original four-table database.
 
 ## Security and privacy notes
 
