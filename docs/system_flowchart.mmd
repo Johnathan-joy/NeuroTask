@@ -1,40 +1,54 @@
 flowchart TD
     A([Start]) --> B[Open NeuroTask]
     B --> C{Existing account?}
-    C -- No --> D[Register account]
+    C -- No --> D[Register as Student]
     C -- Yes --> E[Log in]
     D --> F[Validate input and hash password]
-    F --> G[(PostgreSQL: create user)]
+    F --> G[(PostgreSQL: create Student)]
     G --> E
-    E --> H{Credentials valid?}
+    E --> H{Credentials valid and account active?}
     H -- No --> I[Show login error]
     I --> E
-    H -- Yes --> J[Load authenticated user workspace]
-    J --> K[Create or select assignment]
-    K --> L[Submit assignment prompt]
-    L --> M[Generate micro-actions using LLM JSON schema]
-    M --> N{Valid, atomic steps?}
-    N -- No --> O[Use offline heuristic templates / retry]
-    O --> P[Build prerequisite dependency DAG]
-    N -- Yes --> P
-    P --> Q[Save assignment and subtasks for this user]
-    Q --> R[Find next unlocked micro-action]
-    R --> S{An unlocked step exists?}
-    S -- No --> T[Show assignment completion]
-    S -- Yes --> U[Display only active step and criteria]
-    U --> V[Start focus timer]
-    V --> W{User stuck?}
-    W -- Yes --> X[Split blocked step into two 5-min actions]
-    X --> Y[Log rescue event]
-    Y --> R
-    W -- No --> Z{Step completed?}
-    Z -- No --> AA[Continue / pause focus session]
-    AA --> AB[Capture energy rating and distraction tags]
-    AB --> V
-    Z -- Yes --> AC[Mark step complete]
-    AC --> AD[Unlock dependent steps]
-    AD --> AE[Log session duration, energy and distractions]
-    AE --> R
-    T --> AF[Update personal telemetry dashboard]
-    AF --> AG[Optionally save assignment blueprint]
-    AG --> AH([End / Return to workspace])
+    H -- Yes --> J{Identify user role}
+
+    J -- Admin --> K[Admin Dashboard]
+    K --> K1[Search and manage user accounts]
+    K --> K2[Monitor aggregate usage metrics]
+    K --> K3[Review system status and errors]
+    K --> K4[Manage blueprints]
+    K1 --> K5[Record administrative action]
+    K4 --> K5
+    K5 --> K6[(Admin Audit Logs)]
+    K2 --> K7[Respect student data privacy]
+    K3 --> K7
+    K6 --> Z([Logout])
+
+    J -- Student --> L[Student Dashboard]
+    L --> M[Create or select assignment]
+    M --> N{Use existing blueprint?}
+    N -- Yes --> O[Select blueprint]
+    N -- No --> P[Enter assignment details]
+    O --> Q[Generate micro-actions]
+    P --> Q
+    Q --> R[Validate generated actions]
+    R --> S{Valid atomic steps?}
+    S -- No --> T[Use offline templates or retry]
+    T --> U[Build dependency DAG]
+    S -- Yes --> U
+    U --> V[Save assignment, subtasks and dependencies]
+    V --> W[Find next unlocked action]
+    W --> X{Unlocked action exists?}
+    X -- No --> Y[Show assignment completion and insights]
+    X -- Yes --> AA[Display one active action]
+    AA --> AB[Start focus session]
+    AB --> AC{Student stuck?}
+    AC -- Yes --> AD[Split action into smaller actions]
+    AD --> U
+    AC -- No --> AE{Action completed?}
+    AE -- No --> AF[Pause or continue timer]
+    AF --> AG[Record optional telemetry]
+    AG --> AB
+    AE -- Yes --> AH[Complete action and unlock dependents]
+    AH --> AI[Close focus session and record telemetry]
+    AI --> W
+    Y --> Z
