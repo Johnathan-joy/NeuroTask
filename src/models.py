@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from sqlalchemy import (
     BigInteger, Boolean, CheckConstraint, Date, DateTime, ForeignKey,
     Integer, String, Text, UniqueConstraint, func
@@ -43,7 +43,7 @@ class Assignment(Base):
     blueprint_id: Mapped[int | None] = mapped_column(ForeignKey("blueprints.id", ondelete="SET NULL"))
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     assignment_prompt: Mapped[str] = mapped_column(Text, nullable=False)
-    deadline: Mapped[datetime | None] = mapped_column(Date)
+    deadline: Mapped[date | None] = mapped_column(Date)
     status: Mapped[str] = mapped_column(String(30), default="active", server_default="active", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
