@@ -1,0 +1,90 @@
+erDiagram
+    USERS ||--o{ ASSIGNMENTS : creates
+    USERS ||--o{ FOCUS_SESSIONS : starts
+    USERS ||--o{ TELEMETRY_LOGS : records
+    USERS ||--o{ ADMIN_AUDIT_LOGS : performs
+    USERS o|--o{ BLUEPRINTS : manages
+    BLUEPRINTS o|--o{ ASSIGNMENTS : used_for
+    ASSIGNMENTS ||--o{ SUBTASKS : contains
+    ASSIGNMENTS ||--o{ FOCUS_SESSIONS : has
+    ASSIGNMENTS o|--o{ TELEMETRY_LOGS : relates_to
+    SUBTASKS o|--o{ FOCUS_SESSIONS : focuses_on
+    SUBTASKS o|--o{ TELEMETRY_LOGS : relates_to
+    FOCUS_SESSIONS o|--o{ TELEMETRY_LOGS : generates
+    SUBTASKS ||--o{ SUBTASK_DEPENDENCIES : source_task
+    SUBTASKS ||--o{ SUBTASK_DEPENDENCIES : prerequisite_task
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string password_hash
+        string role
+        boolean is_active
+        datetime created_at
+    }
+    ASSIGNMENTS {
+        bigint id PK
+        bigint user_id FK
+        bigint blueprint_id FK
+        string title
+        text assignment_prompt
+        date deadline
+        string status
+        datetime created_at
+    }
+    SUBTASKS {
+        bigint id PK
+        bigint assignment_id FK
+        string title
+        text description
+        int estimated_minutes
+        int sequence_order
+        string status
+        text completion_criteria
+        datetime created_at
+    }
+    SUBTASK_DEPENDENCIES {
+        bigint subtask_id PK,FK
+        bigint depends_on_subtask_id PK,FK
+    }
+    FOCUS_SESSIONS {
+        bigint id PK
+        bigint user_id FK
+        bigint assignment_id FK
+        bigint subtask_id FK
+        datetime started_at
+        datetime ended_at
+        int duration_minutes
+        string status
+    }
+    TELEMETRY_LOGS {
+        bigint id PK
+        bigint user_id FK
+        bigint session_id FK
+        bigint assignment_id FK
+        bigint subtask_id FK
+        string event_type
+        int energy_rating
+        json distraction_tags
+        json metadata
+        datetime created_at
+    }
+    BLUEPRINTS {
+        bigint id PK
+        bigint created_by FK
+        string title
+        text description
+        string category
+        json template_data
+        datetime created_at
+    }
+    ADMIN_AUDIT_LOGS {
+        bigint id PK
+        bigint admin_id FK
+        string action
+        string target_type
+        bigint target_id
+        json details
+        datetime created_at
+    }
