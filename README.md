@@ -67,6 +67,7 @@ Never commit `.env` or publish database/API credentials.
 - `docs/er_diagram.mmd` — Database entities and relationships.
 - `docs/system_architecture.mmd` — Prototype and final application architectures.
 - `docs/SRS.md` — Software Requirements Specification, version 2.0.
+- `docs/ui_wireframes.md` — Student and Admin page layout specifications.
 - `database/migrations/002_neurotask_v2.sql` — Upgrade script for an existing original four-table database.
 
 ## Security and privacy notes
