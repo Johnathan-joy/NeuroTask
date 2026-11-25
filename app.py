@@ -52,12 +52,23 @@ if st.session_state.user is None:
                     st.error(str(exc))
 else:
     user = st.session_state.user
+    student_pages = [
+        "Overview", "My Assignments", "Focus Workspace",
+        "Burnout Insights", "Blueprint Library"
+    ]
+    admin_pages = [
+        "Admin Overview", "User Management",
+        "Application Monitoring", "Blueprint Management", "Admin Audit Logs"
+    ]
+    pages = admin_pages if user.get("role") == "admin" else student_pages
+
     with st.sidebar:
         st.write(f"Signed in as **{user['email']}**")
+        st.caption(f"Role: {user.get('role', 'student').title()}")
         if st.button("Log out"):
             st.session_state.user = None
             st.rerun()
-        page = st.radio("Navigate", ["Overview", "My Assignments", "Focus Workspace", "Burnout Insights", "Blueprint Library"])
+        page = st.radio("Navigate", pages)
 
     if page == "Overview":
         st.subheader("Welcome to your private workspace")
@@ -78,3 +89,18 @@ else:
     elif page == "Blueprint Library":
         st.subheader("Blueprint Library")
         st.info("Reusable assignment blueprints will be implemented after the core task workflow.")
+    elif page == "Admin Overview":
+        st.subheader("Admin Dashboard")
+        st.info("Aggregate application statistics will be implemented in the Admin module.")
+    elif page == "User Management":
+        st.subheader("User Management")
+        st.info("Authorised account search and activation controls will be implemented here.")
+    elif page == "Application Monitoring":
+        st.subheader("Application Monitoring")
+        st.info("Database, AI-service and application health monitoring will be implemented here.")
+    elif page == "Blueprint Management":
+        st.subheader("Blueprint Management")
+        st.info("Authorised blueprint maintenance will be implemented here.")
+    elif page == "Admin Audit Logs":
+        st.subheader("Admin Audit Logs")
+        st.info("Administrative actions will be recorded and displayed here.")
